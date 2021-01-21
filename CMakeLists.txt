@@ -11,12 +11,20 @@ add_library(GLAD
 )
 set(GLAD_INCLUDE_DIRECTORY ${LIBS_PATH}/glad/include/)
 
-# setup glfw
-add_subdirectory(${LIBS_PATH}/glfw)
+set(_GLFW_X11 1)
+find_package(Threads)
+add_subdirectory(${LIBS_PATH}/glfw/src/)
+set(GLFW_INCLUDE_DIRECTORY ${LIBS_PATH}/glfw/include/)
+
+add_subdirectory(${LIBS_PATH}/glm)
+set(GLM_INCLUDE_DIRECTORY ${LIBS_PATH}/glm/)
+
 
 
 add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/gamecontext.cpp
   ${SOURCE_PATH}/gamecontext.h
 )
-include_directories(${GLAD_INCLUDE_DIRECTORY})
+
+include_directories(${GLAD_INCLUDE_DIRECTORY} ${GLM_INCLUDE_DIRECTORY} ${GLFW_INCLUDE_DIRECTORY})
+target_link_libraries(${PROJECT_NAME} GLAD glfw dl)
