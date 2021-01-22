@@ -1,4 +1,5 @@
 #include "gamecontext.h"
+#include "shader.h"
 
 CGameContext::CGameContext(){
     if(!glfwInit()){
@@ -27,11 +28,31 @@ CGameContext::CGameContext(){
     }
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    // create block shaders and program
+    m_BlockProgram = glCreateProgram();
+
+    try{
+        CShader* pBlockVertSh = new CShader("block.vert", GL_VERTEX_SHADER);
+        CShader* pBlockFragSh = new CShader("block.frag", GL_FRAGMENT_SHADER);
+
+        glAttachShader(m_BlockProgram, pBlockVertSh->GetValue());
+        glAttachShader(m_BlockProgram, pBlockFragSh->GetValue());
+        glLinkProgram(m_BlockProgram);
+
+        delete pBlockVertSh;
+        delete pBlockFragSh;
+
+    }catch(int& Failure){
+        glfwSetWindowShouldClose(m_pWindow, true);
+        return;
+    }
 }
 
 void CGameContext::Run(){
     while(!glfwWindowShouldClose(m_pWindow)){
-
+        Inputs();
+        Render();
 
         glfwSwapBuffers(m_pWindow);
         glfwPollEvents();
@@ -41,7 +62,21 @@ void CGameContext::Run(){
 }
 
 CGameContext::~CGameContext(){
+    glDeleteProgram(m_BlockProgram);
     glfwTerminate();
+}
+
+void CGameContext::Inputs(){
+    if(glfwGetKey(m_pWindow, GLFW_KEY_Q))
+        glfwSetWindowShouldClose(m_pWindow, true);
+}
+
+void CGameContext::Render(){
+    static RGBAColor SkyColor(115, 204, 255);
+    glClearColor(SkyColor.r, SkyColor.g, SkyColor.b, SkyColor.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    
 }
 
 int main(){

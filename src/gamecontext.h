@@ -1,9 +1,14 @@
+#pragma once
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 #include <cstring>
 #include <cstdio>
+#include <inttypes.h>
+
+#include "color.h"
 
 #define ANTIALIASING
 
@@ -13,7 +18,10 @@
 class CGameContext{
 private:
     GLFWwindow* m_pWindow;
+    uint32_t m_BlockProgram;
 
+    void Inputs();
+    void Render();
 
 public:
     CGameContext();
