@@ -1,5 +1,11 @@
 #include "gamecontext.h"
 #include "shader.h"
+#include "block.h"
+#include "texture.h"
+
+static void OnWindowSizeChange(GLFWwindow* pWindow, int Width, int Height){
+    glViewport(0, 0, Width, Height);
+}
 
 CGameContext::CGameContext(){
     if(!glfwInit()){
@@ -28,6 +34,7 @@ CGameContext::CGameContext(){
     }
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glfwSetFramebufferSizeCallback(m_pWindow, OnWindowSizeChange);
 
     // create block shaders and program
     m_BlockProgram = glCreateProgram();
@@ -50,14 +57,20 @@ CGameContext::CGameContext(){
 }
 
 void CGameContext::Run(){
+    m_pTexGrass = new CTexture("grass_block_side");
+    CBlock* pBlock = new CBlock(this, glm::mat4(1.0f), CBlockTexture(m_pTexGrass->GetValue(), m_pTexGrass->GetValue(), m_pTexGrass->GetValue()));
+
     while(!glfwWindowShouldClose(m_pWindow)){
         Inputs();
         Render();
+        pBlock->Render();
 
         glfwSwapBuffers(m_pWindow);
         glfwPollEvents();
     }
 
+    delete pBlock;
+    delete m_pTexGrass;
     delete this;
 }
 
@@ -76,7 +89,7 @@ void CGameContext::Render(){
     glClearColor(SkyColor.r, SkyColor.g, SkyColor.b, SkyColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    
+    glUseProgram(m_BlockProgram);
 }
 
 int main(){

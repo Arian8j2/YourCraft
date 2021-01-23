@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <cstring>
 #include <cstdio>
@@ -20,6 +22,8 @@ private:
     GLFWwindow* m_pWindow;
     uint32_t m_BlockProgram;
 
+    class CTexture* m_pTexGrass;
+
     void Inputs();
     void Render();
 
@@ -28,4 +32,6 @@ public:
     ~CGameContext();
     
     void Run();
+
+    uint32_t GetBlockProgram() const { return m_BlockProgram; }
 };

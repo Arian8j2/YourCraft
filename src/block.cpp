@@ -1,0 +1,45 @@
+#include "block.h"
+#include "gamecontext.h"
+
+CBlock::CBlock(CGameContext* pGameContext, glm::mat4 Pos, CBlockTexture Textures): m_pGameContext(pGameContext), m_Pos(Pos), m_Textures(Textures){
+    glGenVertexArrays(1, &m_VAO);
+    glBindVertexArray(m_VAO);
+
+    const static float aVerticies[] = {
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+    };
+
+    glGenBuffers(1, &m_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(aVerticies), aVerticies, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(float)*8, 0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(float)*8, (void*)(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(float)*8, (void*)(sizeof(float)*6));
+    glEnableVertexAttribArray(2);
+
+    glGetUniformLocation(pGameContext->GetBlockProgram(), "uBlockPos");
+}
+
+void CBlock::Render(){
+    glBindVertexArray(m_VAO);
+    glUniformMatrix4fv(m_BlockPosUniform, 1, 0, glm::value_ptr(m_Pos));
+    
+    glBindTexture(GL_TEXTURE_2D, m_Textures.m_Middle);
+    glActiveTexture(GL_TEXTURE0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+CBlock::~CBlock(){
+    glDeleteVertexArrays(1, &m_VAO);
+    glDeleteBuffers(1, &m_VBO);
+}
