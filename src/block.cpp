@@ -1,5 +1,6 @@
 #include "block.h"
 #include "gamecontext.h"
+#include "player.h"
 
 CBlock::CBlock(CGameContext* pGameContext, glm::mat4 Pos, CBlockTexture Textures): m_pGameContext(pGameContext), m_Pos(Pos), m_Textures(Textures){
     glGenVertexArrays(1, &m_VAO);
@@ -27,12 +28,18 @@ CBlock::CBlock(CGameContext* pGameContext, glm::mat4 Pos, CBlockTexture Textures
     glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(float)*8, (void*)(sizeof(float)*6));
     glEnableVertexAttribArray(2);
 
-    glGetUniformLocation(pGameContext->GetBlockProgram(), "uBlockPos");
+    m_BlockPosUniform = glGetUniformLocation(pGameContext->GetBlockProgram(), "uBlockPos");
+    m_PlayerViewUniform = glGetUniformLocation(pGameContext->GetBlockProgram(), "uView");
+    m_ProjectionUniform = glGetUniformLocation(pGameContext->GetBlockProgram(), "uProjection");
 }
 
 void CBlock::Render(){
+    static glm::mat4 s_Projection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
+
     glBindVertexArray(m_VAO);
     glUniformMatrix4fv(m_BlockPosUniform, 1, 0, glm::value_ptr(m_Pos));
+    glUniformMatrix4fv(m_PlayerViewUniform, 1, 0, glm::value_ptr(m_pGameContext->GetPlayer()->m_View));
+    glUniformMatrix4fv(m_ProjectionUniform, 1, 0, glm::value_ptr(s_Projection));
     
     glBindTexture(GL_TEXTURE_2D, m_Textures.m_Middle);
     glActiveTexture(GL_TEXTURE0);

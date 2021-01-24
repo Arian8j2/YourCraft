@@ -2,12 +2,21 @@
 #include "shader.h"
 #include "block.h"
 #include "texture.h"
+#include "player.h"
 
+static CGameContext* gs_GameContext;
 static void OnWindowSizeChange(GLFWwindow* pWindow, int Width, int Height){
     glViewport(0, 0, Width, Height);
 }
 
+static void OnMouseMove(GLFWwindow* pWindow, double X, double Y){
+    gs_GameContext->GetPlayer()->HandleMouseMovement(X, Y);
+}
+
+
 CGameContext::CGameContext(){
+    gs_GameContext = this;
+
     if(!glfwInit()){
         fprintf(stderr, "Error, Cannot initialize GLFW\n");
         return;
@@ -54,15 +63,23 @@ CGameContext::CGameContext(){
         glfwSetWindowShouldClose(m_pWindow, true);
         return;
     }
+
+    m_pTexGrass = new CTexture("grass_block_side");
+    m_pPlayer = new CPlayer(this);
+
+    glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(m_pWindow, OnMouseMove);
 }
 
 void CGameContext::Run(){
-    m_pTexGrass = new CTexture("grass_block_side");
     CBlock* pBlock = new CBlock(this, glm::mat4(1.0f), CBlockTexture(m_pTexGrass->GetValue(), m_pTexGrass->GetValue(), m_pTexGrass->GetValue()));
 
     while(!glfwWindowShouldClose(m_pWindow)){
         Inputs();
         Render();
+
+        m_pPlayer->UpdateView();
+        m_pPlayer->HandleInputs();
         pBlock->Render();
 
         glfwSwapBuffers(m_pWindow);
@@ -70,11 +87,13 @@ void CGameContext::Run(){
     }
 
     delete pBlock;
-    delete m_pTexGrass;
     delete this;
 }
 
 CGameContext::~CGameContext(){
+    delete m_pTexGrass;
+    delete m_pPlayer;
+
     glDeleteProgram(m_BlockProgram);
     glfwTerminate();
 }

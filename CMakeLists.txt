@@ -31,6 +31,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/block.h
   ${SOURCE_PATH}/texture.cpp
   ${SOURCE_PATH}/texture.h
+  ${SOURCE_PATH}/player.cpp
+  ${SOURCE_PATH}/player.h
 )
 
 function(copy_dir DIR_NAME)

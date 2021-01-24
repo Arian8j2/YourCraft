@@ -23,6 +23,7 @@ private:
     uint32_t m_BlockProgram;
 
     class CTexture* m_pTexGrass;
+    class CPlayer* m_pPlayer;
 
     void Inputs();
     void Render();
@@ -34,4 +35,6 @@ public:
     void Run();
 
     uint32_t GetBlockProgram() const { return m_BlockProgram; }
+    class CPlayer* GetPlayer() const { return m_pPlayer; }
+    GLFWwindow* GetWindow() { return m_pWindow; }
 };

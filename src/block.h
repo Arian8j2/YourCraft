@@ -13,7 +13,10 @@ struct CBlockTexture{
 class CBlock{
 private:
     glm::mat4 m_Pos;
+
     uint32_t m_BlockPosUniform;
+    uint32_t m_PlayerViewUniform;
+    uint32_t m_ProjectionUniform;
 
     uint32_t m_VAO;
     uint32_t m_VBO;
