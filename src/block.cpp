@@ -7,12 +7,53 @@ CBlock::CBlock(CGameContext* pGameContext, glm::mat4 Pos, CBlockTexture Textures
     glBindVertexArray(m_VAO);
 
     const static float aVerticies[] = {
+        // sides
+        //  front
         -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
          0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
         -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
          0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
          0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
         -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+        //  left
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        //  right
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        //  back
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+
+
+        //bottom
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+
+
+        //top
+        -0.5f,  0.5f,  0.5f,  0.496f, 0.697f, 0.300f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.496f, 0.697f, 0.300f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.496f, 0.697f, 0.300f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.496f, 0.697f, 0.300f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.496f, 0.697f, 0.300f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.496f, 0.697f, 0.300f,  0.0f, 1.0f,
     };
 
     glGenBuffers(1, &m_VBO);
@@ -43,7 +84,13 @@ void CBlock::Render(){
     
     glBindTexture(GL_TEXTURE_2D, m_Textures.m_Middle);
     glActiveTexture(GL_TEXTURE0);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 24);
+
+    glBindTexture(GL_TEXTURE_2D, m_Textures.m_Bottom);
+    glDrawArrays(GL_TRIANGLES, 24, 6);
+
+    glBindTexture(GL_TEXTURE_2D, m_Textures.m_Top);
+    glDrawArrays(GL_TRIANGLES, 30, 6);
 }
 
 CBlock::~CBlock(){

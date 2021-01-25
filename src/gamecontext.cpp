@@ -34,6 +34,10 @@ CGameContext::CGameContext(){
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
+#ifndef V_SYNC
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
+#endif
+
     m_pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "YourCraft", 0, 0);
     glfwMakeContextCurrent(m_pWindow);
 
@@ -64,34 +68,56 @@ CGameContext::CGameContext(){
         return;
     }
 
-    m_pTexGrass = new CTexture("grass_block_side");
     m_pPlayer = new CPlayer(this);
+
+    m_apBlockTexs[0] = new CTexture("grass_block_side");
+    m_apBlockTexs[1] = new CTexture("dirt");
+    m_apBlockTexs[2] = new CTexture("grass_block_top");
 
     glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(m_pWindow, OnMouseMove);
+    glEnable(GL_DEPTH_TEST);
+
+    glm::mat4 BasePos(1.0f);
+    CBlockTexture GrassTexture(m_apBlockTexs[2]->GetValue(), m_apBlockTexs[0]->GetValue(), m_apBlockTexs[1]->GetValue());
+    m_apBlocks.reserve(12*12);
+
+    for(int i=0; i < 12; i++){
+        for(int j=0; j < 12; j++){
+            glm::mat4 Pos = glm::translate(BasePos, glm::vec3(j, 0.0f, i));
+            m_apBlocks.push_back(new CBlock(this, Pos, GrassTexture));
+        }
+    }
 }
 
 void CGameContext::Run(){
-    CBlock* pBlock = new CBlock(this, glm::mat4(1.0f), CBlockTexture(m_pTexGrass->GetValue(), m_pTexGrass->GetValue(), m_pTexGrass->GetValue()));
-
     while(!glfwWindowShouldClose(m_pWindow)){
+        static double s_LastTime = glfwGetTime();
+
+        double CurTime = glfwGetTime();
+        float DeltaTime = CurTime - s_LastTime;
+        s_LastTime = CurTime;
+
         Inputs();
         Render();
 
+        for(CBlock* pBlock: m_apBlocks){
+            pBlock->Render();
+        }
+
         m_pPlayer->UpdateView();
-        m_pPlayer->HandleInputs();
-        pBlock->Render();
+        m_pPlayer->HandleInputs(std::min(DeltaTime, 1 / 140.0f));
 
         glfwSwapBuffers(m_pWindow);
         glfwPollEvents();
     }
 
-    delete pBlock;
     delete this;
 }
 
 CGameContext::~CGameContext(){
-    delete m_pTexGrass;
+    for(int  i=0; i < sizeof(m_apBlockTexs)/sizeof(m_apBlockTexs[0]); i++)
+        delete m_apBlockTexs[i];
     delete m_pPlayer;
 
     glDeleteProgram(m_BlockProgram);

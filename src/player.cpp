@@ -1,35 +1,35 @@
 #include "player.h"
 
 CPlayer::CPlayer(CGameContext* pGameContext): m_pGameContext(pGameContext){
-    m_Camera.m_Pos = glm::vec3(0.0f, 0.0f, 3.0f);
+    m_Camera.m_Pos = glm::vec3(0.0f, 1.5f, 3.0f);
     m_Camera.m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     m_Camera.m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
-    
-    glm::vec3 Right = glm::normalize(glm::cross(m_Camera.m_Front, m_Camera.m_WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    m_Camera.m_Up = glm::normalize(glm::cross(Right, m_Camera.m_Front));
+    m_Camera.m_Right = glm::normalize(glm::cross(m_Camera.m_Front, m_Camera.m_WorldUp));
+    m_Camera.m_Up = glm::normalize(glm::cross(m_Camera.m_Right, m_Camera.m_Front));
 }
 
 void CPlayer::UpdateView(){
     m_View = glm::lookAt(m_Camera.m_Pos, m_Camera.m_Pos + m_Camera.m_Front, m_Camera.m_Up);
+
 }
 
-void CPlayer::HandleInputs(){
+void CPlayer::HandleInputs(float DeltaTime){
     GLFWwindow* pWindow = m_pGameContext->GetWindow();
 
     if(glfwGetKey(pWindow, GLFW_KEY_A)){
-        m_Camera.m_Pos.x -= 0.1f;
+        m_Camera.m_Pos -= m_Camera.m_Right * (SPEED / 100.0f * DeltaTime);
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_D)){
-        m_Camera.m_Pos.x += 0.1f;
+        m_Camera.m_Pos += m_Camera.m_Right * (SPEED / 100.0f * DeltaTime);
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_W)){
-        m_Camera.m_Pos.z -= 0.1f;
+        m_Camera.m_Pos += m_Camera.m_Front * (SPEED / 100.0f * DeltaTime);
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_S)){
-        m_Camera.m_Pos.z += 0.1f;
+        m_Camera.m_Pos -= m_Camera.m_Front * (SPEED / 100.0f * DeltaTime);
     }
 }
 
@@ -62,4 +62,7 @@ void CPlayer::HandleMouseMovement(double X, double Y){
     Direction.y = sin(glm::radians(s_Pitch));
     Direction.z = sin(glm::radians(s_Yaw)) * cos(glm::radians(s_Pitch));
     m_Camera.m_Front = glm::normalize(Direction);
+
+    m_Camera.m_Right = glm::normalize(glm::cross(m_Camera.m_Front, m_Camera.m_WorldUp));
+    m_Camera.m_Up = glm::normalize(glm::cross(m_Camera.m_Right, m_Camera.m_Front));
 }
