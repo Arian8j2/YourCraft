@@ -1,6 +1,5 @@
 #include "gamecontext.h"
 #include "shader.h"
-#include "block.h"
 #include "texture.h"
 #include "player.h"
 #include "text.h"
@@ -75,18 +74,21 @@ CGameContext::CGameContext(){
     m_apBlockTexs[1] = new CTexture("dirt");
     m_apBlockTexs[2] = new CTexture("grass_block_top");
 
+    CBlockTexture GrassTexture(m_apBlockTexs[2]->GetValue(), glm::vec3(0.496f, 0.697f, 0.300f), m_apBlockTexs[0]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f), m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f));
+    m_apBlocks[BLOCK_GRASS] = new CBlock(this, GrassTexture);
+
     glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(m_pWindow, OnMouseMove);
     glEnable(GL_DEPTH_TEST);
 
     glm::mat4 BasePos(1.0f);
-    CBlockTexture GrassTexture(m_apBlockTexs[2]->GetValue(), m_apBlockTexs[0]->GetValue(), m_apBlockTexs[1]->GetValue());
-    m_apBlocks.reserve(12*12);
+    CBlockInfo BlockInfoBuffer;
 
     for(int i=0; i < 16; i++){
         for(int j=0; j < 16; j++){
-            glm::mat4 Pos = glm::translate(BasePos, glm::vec3(j, 0.0f, i));
-            m_apBlocks.push_back(new CBlock(this, Pos, GrassTexture));
+            BlockInfoBuffer.m_Pos = glm::translate(BasePos, glm::vec3(j, 0.0f, i));
+            BlockInfoBuffer.m_Type = BLOCK_GRASS;
+            m_aBlockInfos.push_back(BlockInfoBuffer);
         }
     }
 
@@ -119,8 +121,8 @@ void CGameContext::Run(){
         Render();
 
         glUseProgram(m_BlockProgram);
-        for(CBlock* pBlock: m_apBlocks){
-            pBlock->Render();
+        for(CBlockInfo& BlockInfo: m_aBlockInfos){
+            m_apBlocks[BlockInfo.m_Type]->Render(BlockInfo.m_Pos);
         }
 
         // display FPS
@@ -142,6 +144,10 @@ void CGameContext::Run(){
 CGameContext::~CGameContext(){
     for(int  i=0; i < sizeof(m_apBlockTexs)/sizeof(m_apBlockTexs[0]); i++)
         delete m_apBlockTexs[i];
+
+    for(int i=0; i < NUM_BLOCKS; i++)
+        delete m_apBlocks[i];
+    
     delete m_pPlayer;
     delete m_pTextRenderer;
 

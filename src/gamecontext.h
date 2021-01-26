@@ -13,6 +13,7 @@
 #include <inttypes.h>
 
 #include "color.h"
+#include "block.h"
 
 #define ANTIALIASING
 // #define V_SYNC
@@ -25,10 +26,12 @@ private:
     GLFWwindow* m_pWindow;
     uint32_t m_BlockProgram;
 
-    class CTexture* m_apBlockTexs[3];
     class CPlayer* m_pPlayer;
-    class CTextRenderer* m_pTextRenderer; 
-    std::vector<class CBlock*> m_apBlocks;
+    class CTextRenderer* m_pTextRenderer;
+
+    class CTexture* m_apBlockTexs[3];
+    class CBlock* m_apBlocks[NUM_BLOCKS];
+    std::vector<CBlockInfo> m_aBlockInfos;
 
     void Inputs();
     void Render();
