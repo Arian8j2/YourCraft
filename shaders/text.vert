@@ -8,6 +8,6 @@ out vec2 fTexCoord;
 uniform mat4 uProjection;
 
 void main(){
-    gl_Position = vec4(vPos.x, vPos.y, 0.0f, 1.0f);
+    gl_Position = uProjection * vec4(vPos.x, vPos.y, 0.0f, 1.0f);
     fTexCoord = vTexCoord;
 }

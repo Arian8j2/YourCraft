@@ -17,8 +17,8 @@
 #define ANTIALIASING
 // #define V_SYNC
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 
 class CGameContext{
 private:
@@ -27,6 +27,7 @@ private:
 
     class CTexture* m_apBlockTexs[3];
     class CPlayer* m_pPlayer;
+    class CTextRenderer* m_pTextRenderer; 
     std::vector<class CBlock*> m_apBlocks;
 
     void Inputs();

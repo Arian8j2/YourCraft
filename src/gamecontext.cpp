@@ -83,35 +83,52 @@ CGameContext::CGameContext(){
     CBlockTexture GrassTexture(m_apBlockTexs[2]->GetValue(), m_apBlockTexs[0]->GetValue(), m_apBlockTexs[1]->GetValue());
     m_apBlocks.reserve(12*12);
 
-    for(int i=0; i < 12; i++){
-        for(int j=0; j < 12; j++){
+    for(int i=0; i < 16; i++){
+        for(int j=0; j < 16; j++){
             glm::mat4 Pos = glm::translate(BasePos, glm::vec3(j, 0.0f, i));
             m_apBlocks.push_back(new CBlock(this, Pos, GrassTexture));
         }
     }
+
+    m_pTextRenderer = new CTextRenderer;
 }
 
 void CGameContext::Run(){
-    CTextRenderer* pTextRenderer = new CTextRenderer;
+    char aFPSCounter[12] = "counting...";
 
     while(!glfwWindowShouldClose(m_pWindow)){
         static double s_LastTime = glfwGetTime();
 
+        static int s_FrameCount = 0;
+        static double s_FrameSecondExpire = glfwGetTime() + 1.0f;
+
+        // measuring deltatime for input handling
         double CurTime = glfwGetTime();
         float DeltaTime = CurTime - s_LastTime;
         s_LastTime = CurTime;
 
+        // counting FPS
+        s_FrameCount++;
+        if(CurTime >= s_FrameSecondExpire){
+            snprintf(aFPSCounter, sizeof(aFPSCounter), "%d", s_FrameCount);
+            s_FrameCount = 0;
+            s_FrameSecondExpire = glfwGetTime() + 1.0f;
+        }
+
         Inputs();
         Render();
-
-        static RGBAColor TextColor(255, 10, 10, 255);
 
         glUseProgram(m_BlockProgram);
         for(CBlock* pBlock: m_apBlocks){
             pBlock->Render();
         }
 
-        pTextRenderer->RenderText("salam", 25.0f, 35.0f, 1.0f, TextColor);
+        // display FPS
+        {
+            static RGBAColor s_FPSCounterColor(0, 0, 0, 255);
+            m_pTextRenderer->RenderText(aFPSCounter, 15.0f, WINDOW_HEIGHT - 40.0f, 0.7f, s_FPSCounterColor);
+        }
+
         m_pPlayer->UpdateView();
         m_pPlayer->HandleInputs(std::min(DeltaTime, 1 / 140.0f));
 
@@ -119,7 +136,6 @@ void CGameContext::Run(){
         glfwPollEvents();
     }
 
-    delete pTextRenderer;
     delete this;
 }
 
@@ -127,6 +143,7 @@ CGameContext::~CGameContext(){
     for(int  i=0; i < sizeof(m_apBlockTexs)/sizeof(m_apBlockTexs[0]); i++)
         delete m_apBlockTexs[i];
     delete m_pPlayer;
+    delete m_pTextRenderer;
 
     glDeleteProgram(m_BlockProgram);
     glfwTerminate();

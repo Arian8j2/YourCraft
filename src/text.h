@@ -17,7 +17,9 @@ private:
 
     uint32_t m_VAO;
     uint32_t m_VBO;
+
     uint32_t m_ColorUniformLoc;
+    uint32_t m_ProjUniformLoc;
 
 public:
     CTextRenderer();

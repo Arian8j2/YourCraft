@@ -72,10 +72,8 @@ CTextRenderer::CTextRenderer(){
     glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
     glEnableVertexAttribArray(1);
 
-    glm::mat4 Proj = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT);
-    glUniformMatrix4fv(glGetUniformLocation(m_TextProgram, "uProjection"), 1, 0, glm::value_ptr(Proj));
-    
     m_ColorUniformLoc = glGetUniformLocation(m_TextProgram, "uTextColor");
+    m_ProjUniformLoc = glGetUniformLocation(m_TextProgram, "uProjection");
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -93,9 +91,13 @@ CTextRenderer::~CTextRenderer(){
 void CTextRenderer::RenderText(const char* pText, float X, float Y, float Scale, RGBAColor& Color){
     glUseProgram(m_TextProgram);
 
+    static glm::mat4 s_Proj = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT);
+    glUniformMatrix4fv(m_ProjUniformLoc, 1, 0, glm::value_ptr(s_Proj));
     glUniform4f(m_ColorUniformLoc, Color.r, Color.g, Color.b, Color.a);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_VAO);
+
 
     for(int i=0; i < strlen(pText); i++){
         uint8_t SelectedChar = pText[i];
@@ -122,7 +124,7 @@ void CTextRenderer::RenderText(const char* pText, float X, float Y, float Scale,
         glBindTexture(GL_TEXTURE_2D, pCharData->m_TextureID);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(aVerticies), aVerticies); // be sure to use glBufferSubData and not glBufferData
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(aVerticies), aVerticies);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
