@@ -3,6 +3,7 @@
 #include "block.h"
 #include "texture.h"
 #include "player.h"
+#include "text.h"
 
 static CGameContext* gs_GameContext;
 static void OnWindowSizeChange(GLFWwindow* pWindow, int Width, int Height){
@@ -91,6 +92,8 @@ CGameContext::CGameContext(){
 }
 
 void CGameContext::Run(){
+    CTextRenderer* pTextRenderer = new CTextRenderer;
+
     while(!glfwWindowShouldClose(m_pWindow)){
         static double s_LastTime = glfwGetTime();
 
@@ -101,10 +104,14 @@ void CGameContext::Run(){
         Inputs();
         Render();
 
+        static RGBAColor TextColor(255, 10, 10, 255);
+
+        glUseProgram(m_BlockProgram);
         for(CBlock* pBlock: m_apBlocks){
             pBlock->Render();
         }
 
+        pTextRenderer->RenderText("salam", 25.0f, 35.0f, 1.0f, TextColor);
         m_pPlayer->UpdateView();
         m_pPlayer->HandleInputs(std::min(DeltaTime, 1 / 140.0f));
 
@@ -112,6 +119,7 @@ void CGameContext::Run(){
         glfwPollEvents();
     }
 
+    delete pTextRenderer;
     delete this;
 }
 
@@ -133,8 +141,6 @@ void CGameContext::Render(){
     static RGBAColor SkyColor(115, 204, 255);
     glClearColor(SkyColor.r, SkyColor.g, SkyColor.b, SkyColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(m_BlockProgram);
 }
 
 int main(){

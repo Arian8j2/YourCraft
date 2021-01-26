@@ -8,17 +8,20 @@ add_library(GLAD
   ${LIBS_PATH}/glad/src/glad.c
   ${LIBS_PATH}/glad/include/glad/glad.h
 )
-set(GLAD_INCLUDE_DIRECTORY ${LIBS_PATH}/glad/include/)
+set(GLAD_INCLUDE_DIRS ${LIBS_PATH}/glad/include/)
 
 set(_GLFW_X11 1)
 find_package(Threads)
 add_subdirectory(${LIBS_PATH}/glfw/)
-set(GLFW_INCLUDE_DIRECTORY ${LIBS_PATH}/glfw/include/)
+set(GLFW_INCLUDE_DIRS ${LIBS_PATH}/glfw/include/)
 
 add_subdirectory(${LIBS_PATH}/glm)
-set(GLM_INCLUDE_DIRECTORY ${LIBS_PATH}/glm/)
+set(GLM_INCLUDE_DIRS ${LIBS_PATH}/glm/)
 
-set(STB_INCLUDE_DIRECTORY ${LIBS_PATH}/stb)
+set(STB_INCLUDE_DIRS ${LIBS_PATH}/stb)
+
+add_subdirectory(${LIBS_PATH}/freetype2)
+set(FREETYPE_INCLUDE_DIRS ${LIBS_PATH}/freetype2/include)
 
 add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/gamecontext.cpp
@@ -33,6 +36,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/texture.h
   ${SOURCE_PATH}/player.cpp
   ${SOURCE_PATH}/player.h
+  ${SOURCE_PATH}/text.cpp
+  ${SOURCE_PATH}/text.h
 )
 
 function(copy_dir DIR_NAME)
@@ -43,6 +48,7 @@ endfunction()
 
 copy_dir(shaders)
 copy_dir(textures)
+copy_dir(fonts)
 
-include_directories(${GLAD_INCLUDE_DIRECTORY} ${GLM_INCLUDE_DIRECTORY} ${GLFW_INCLUDE_DIRECTORY} ${STB_INCLUDE_DIRECTORY})
-target_link_libraries(${PROJECT_NAME} GLAD glfw dl)
+include_directories(${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${STB_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} GLAD glfw dl freetype)

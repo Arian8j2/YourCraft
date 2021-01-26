@@ -7,3 +7,6 @@
 [submodule "libs/stb"]
 	path = libs/stb
 	url = https://github.com/nothings/stb.git
+[submodule "libs/freetype2"]
+	path = libs/freetype2
+	url = https://github.com/aseprite/freetype2.git
