@@ -74,8 +74,12 @@ CGameContext::CGameContext(){
     m_apBlockTexs[1] = new CTexture("dirt");
     m_apBlockTexs[2] = new CTexture("grass_block_top");
 
-    CBlockTexture GrassTexture(m_apBlockTexs[2]->GetValue(), glm::vec3(0.496f, 0.697f, 0.300f), m_apBlockTexs[0]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f), m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f));
-    m_apBlocks[BLOCK_GRASS] = new CBlock(this, GrassTexture);
+    CBlockTexture TexBuffer(m_apBlockTexs[2]->GetValue(), glm::vec3(0.496f, 0.697f, 0.300f), m_apBlockTexs[0]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f), m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f));
+    m_apBlocks[BLOCK_GRASS] = new CBlock(this, TexBuffer);
+
+    TexBuffer = CBlockTexture(m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f), m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f), m_apBlockTexs[1]->GetValue(), glm::vec3(1.0f, 1.0f, 1.0f));
+    m_apBlocks[BLOCK_DIRT] = new CBlock(this, TexBuffer);
+
 
     glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(m_pWindow, OnMouseMove);
@@ -84,11 +88,13 @@ CGameContext::CGameContext(){
     glm::mat4 BasePos(1.0f);
     CBlockInfo BlockInfoBuffer;
 
-    for(int i=0; i < 16; i++){
-        for(int j=0; j < 16; j++){
-            BlockInfoBuffer.m_Pos = glm::translate(BasePos, glm::vec3(j, 0.0f, i));
-            BlockInfoBuffer.m_Type = BLOCK_GRASS;
-            m_aBlockInfos.push_back(BlockInfoBuffer);
+    for(int y=0; y < 3; y++){
+        for(int i=0; i < 16; i++){
+            for(int j=0; j < 16; j++){
+                BlockInfoBuffer.m_Pos = glm::translate(BasePos, glm::vec3(j, -y, i));
+                BlockInfoBuffer.m_Type = y==0?BLOCK_GRASS: BLOCK_DIRT;
+                m_aBlockInfos.push_back(BlockInfoBuffer);
+            }
         }
     }
 

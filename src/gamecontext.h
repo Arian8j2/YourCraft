@@ -14,6 +14,7 @@
 
 #include "color.h"
 #include "block.h"
+#include "collision.h"
 
 #define ANTIALIASING
 // #define V_SYNC
@@ -31,7 +32,6 @@ private:
 
     class CTexture* m_apBlockTexs[3];
     class CBlock* m_apBlocks[NUM_BLOCKS];
-    std::vector<CBlockInfo> m_aBlockInfos;
 
     void Inputs();
     void Render();
@@ -45,4 +45,6 @@ public:
     uint32_t GetBlockProgram() const { return m_BlockProgram; }
     class CPlayer* GetPlayer() const { return m_pPlayer; }
     GLFWwindow* GetWindow() { return m_pWindow; }
+
+    std::vector<CBlockInfo> m_aBlockInfos;
 };

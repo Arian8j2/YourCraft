@@ -38,6 +38,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/player.h
   ${SOURCE_PATH}/text.cpp
   ${SOURCE_PATH}/text.h
+  ${SOURCE_PATH}/collision.cpp
+  ${SOURCE_PATH}/collision.h
 )
 
 function(copy_dir DIR_NAME)

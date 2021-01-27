@@ -15,21 +15,31 @@ void CPlayer::UpdateView(){
 
 void CPlayer::HandleInputs(float DeltaTime){
     GLFWwindow* pWindow = m_pGameContext->GetWindow();
+    float Boost = 1.0f;
+
+    if(glfwGetKey(pWindow, GLFW_KEY_LEFT_SHIFT))
+        Boost = 4.0f;
+    else
+        Boost = 1.0f;
 
     if(glfwGetKey(pWindow, GLFW_KEY_A)){
-        m_Camera.m_Pos -= m_Camera.m_Right * (SPEED / 100.0f * DeltaTime);
+        m_Camera.m_Pos -= m_Camera.m_Right * (SPEED / 100.0f * DeltaTime) * Boost;
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_D)){
-        m_Camera.m_Pos += m_Camera.m_Right * (SPEED / 100.0f * DeltaTime);
+        m_Camera.m_Pos += m_Camera.m_Right * (SPEED / 100.0f * DeltaTime) * Boost;
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_W)){
-        m_Camera.m_Pos += m_Camera.m_Front * (SPEED / 100.0f * DeltaTime);
+        float Y = m_Camera.m_Pos.y;
+        m_Camera.m_Pos += m_Camera.m_Front * (SPEED / 100.0f * DeltaTime) * Boost;
+        m_Camera.m_Pos.y = Y;
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_S)){
-        m_Camera.m_Pos -= m_Camera.m_Front * (SPEED / 100.0f * DeltaTime);
+        float Y = m_Camera.m_Pos.y;
+        m_Camera.m_Pos -= m_Camera.m_Front * (SPEED / 100.0f * DeltaTime) * Boost;
+        m_Camera.m_Pos.y = Y;
     }
 }
 
