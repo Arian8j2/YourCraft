@@ -15,12 +15,7 @@
 #include "color.h"
 #include "block.h"
 #include "collision.h"
-
-#define ANTIALIASING
-// #define V_SYNC
-
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
+#include "setting.h"
 
 class CGameContext{
 private:
@@ -32,6 +27,8 @@ private:
 
     class CTexture* m_apBlockTexs[3];
     class CBlock* m_apBlocks[NUM_BLOCKS];
+
+    CSetting m_Setting;
 
     void Inputs();
     void Render();
@@ -45,6 +42,9 @@ public:
     uint32_t GetBlockProgram() const { return m_BlockProgram; }
     class CPlayer* GetPlayer() const { return m_pPlayer; }
     GLFWwindow* GetWindow() { return m_pWindow; }
+    rapidjson::Value& GetSettingValue(const char* pName){ return m_Setting.m_Values[pName]; }
 
     std::vector<CBlockInfo> m_aBlockInfos;
+
+    int m_Width, m_Height;
 };

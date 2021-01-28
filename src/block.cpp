@@ -73,7 +73,7 @@ CBlock::CBlock(CGameContext* pGameContext, CBlockTexture Textures): m_pGameConte
 }
 
 void CBlock::Render(glm::mat4& Pos){
-    static glm::mat4 s_Projection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
+    static glm::mat4 s_Projection = glm::perspective(glm::radians((float) m_pGameContext->GetSettingValue("fov").GetInt()), (float)m_pGameContext->m_Width / m_pGameContext->m_Height, 0.1f, 100.0f);
 
     glBindVertexArray(m_VAO);
     glUniformMatrix4fv(m_BlockPosUniform, 1, 0, glm::value_ptr(Pos));

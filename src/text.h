@@ -21,8 +21,10 @@ private:
     uint32_t m_ColorUniformLoc;
     uint32_t m_ProjUniformLoc;
 
+    class CGameContext* m_pGameContext;
+
 public:
-    CTextRenderer();
+    CTextRenderer(class CGameContext* pGameContext);
     ~CTextRenderer();
 
     void RenderText(const char* pText, float X, float Y, float Scale, RGBAColor& Color);

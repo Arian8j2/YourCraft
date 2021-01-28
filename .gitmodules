@@ -10,3 +10,6 @@
 [submodule "libs/freetype2"]
 	path = libs/freetype2
 	url = https://github.com/aseprite/freetype2.git
+[submodule "libs/rapidjson"]
+	path = libs/rapidjson
+	url = https://github.com/Tencent/rapidjson.git

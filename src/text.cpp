@@ -1,10 +1,11 @@
 #include "text.h"
+#include "gamecontext.h"
 #include "shader.h"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
-CTextRenderer::CTextRenderer(){
+CTextRenderer::CTextRenderer(CGameContext* pGameContext): m_pGameContext(pGameContext){
     FT_Library FtLib;
     if(FT_Init_FreeType(&FtLib)){
         puts("Error, Cannot initialize Freetype");
@@ -91,7 +92,7 @@ CTextRenderer::~CTextRenderer(){
 void CTextRenderer::RenderText(const char* pText, float X, float Y, float Scale, RGBAColor& Color){
     glUseProgram(m_TextProgram);
 
-    static glm::mat4 s_Proj = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT);
+    static glm::mat4 s_Proj = glm::ortho(0.0f, (float)m_pGameContext->m_Width, 0.0f, (float)m_pGameContext->m_Height);
     glUniformMatrix4fv(m_ProjUniformLoc, 1, 0, glm::value_ptr(s_Proj));
     glUniform4f(m_ColorUniformLoc, Color.r, Color.g, Color.b, Color.a);
     

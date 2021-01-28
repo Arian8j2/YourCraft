@@ -1,0 +1,13 @@
+{
+    "window": {
+        "width": 1366,
+        "height": 768,
+        "fullscreen": true
+    },
+
+    "fov": 70,
+    "show_fps": true,
+
+    "anti_aliasing": true,
+    "v-sync": false
+}

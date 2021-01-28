@@ -23,6 +23,11 @@ set(STB_INCLUDE_DIRS ${LIBS_PATH}/stb)
 add_subdirectory(${LIBS_PATH}/freetype2)
 set(FREETYPE_INCLUDE_DIRS ${LIBS_PATH}/freetype2/include)
 
+option(RAPIDJSON_BUILD_EXAMPLES "Build rapidjson examples." OFF)
+option(RAPIDJSON_BUILD_TESTS "Build rapidjson perftests and unittests." OFF)
+add_subdirectory(${LIBS_PATH}/rapidjson)
+set(RAPIDJSON_INCLUDE_DIRS ${LIBS_PATH}/rapidjson/include)
+
 add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/gamecontext.cpp
   ${SOURCE_PATH}/gamecontext.h
@@ -40,6 +45,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/text.h
   ${SOURCE_PATH}/collision.cpp
   ${SOURCE_PATH}/collision.h
+  ${SOURCE_PATH}/setting.cpp
+  ${SOURCE_PATH}/setting.h
 )
 
 function(copy_dir DIR_NAME)
@@ -51,6 +58,7 @@ endfunction()
 copy_dir(shaders)
 copy_dir(textures)
 copy_dir(fonts)
+configure_file(settings.json settings.json COPYONLY)
 
-include_directories(${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${STB_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+include_directories(${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${STB_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${RAPIDJSON_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} GLAD glfw dl freetype)

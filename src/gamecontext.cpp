@@ -17,6 +17,9 @@ static void OnMouseMove(GLFWwindow* pWindow, double X, double Y){
 CGameContext::CGameContext(){
     gs_GameContext = this;
 
+    m_Width = GetSettingValue("width").GetInt();
+    m_Height = GetSettingValue("height").GetInt();
+
     if(!glfwInit()){
         fprintf(stderr, "Error, Cannot initialize GLFW\n");
         return;
@@ -26,19 +29,18 @@ CGameContext::CGameContext(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#ifdef ANTIALIASING
-    glfwWindowHint(GLFW_SAMPLES, 4);
-#endif
+    if(GetSettingValue("anti_aliasing").GetBool())
+        glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-#ifndef V_SYNC
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
-#endif
+    if(!GetSettingValue("v-sync").GetBool())
+        glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
-    m_pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "YourCraft", 0, 0);
+
+    m_pWindow = glfwCreateWindow(m_Width, m_Height, "YourCraft", GetSettingValue("fullscreen").GetBool()? glfwGetPrimaryMonitor(): 0, 0);
     glfwMakeContextCurrent(m_pWindow);
 
     if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)){
@@ -46,7 +48,7 @@ CGameContext::CGameContext(){
         return;
     }
 
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glViewport(0, 0, m_Width, m_Height);
     glfwSetFramebufferSizeCallback(m_pWindow, OnWindowSizeChange);
 
     // create block shaders and program
@@ -98,11 +100,12 @@ CGameContext::CGameContext(){
         }
     }
 
-    m_pTextRenderer = new CTextRenderer;
+    m_pTextRenderer = new CTextRenderer(this);
 }
 
 void CGameContext::Run(){
     char aFPSCounter[12] = "counting...";
+    bool ShowFPS = GetSettingValue("show_fps").GetBool();
 
     while(!glfwWindowShouldClose(m_pWindow)){
         static double s_LastTime = glfwGetTime();
@@ -132,9 +135,9 @@ void CGameContext::Run(){
         }
 
         // display FPS
-        {
+        if(ShowFPS){
             static RGBAColor s_FPSCounterColor(0, 0, 0, 255);
-            m_pTextRenderer->RenderText(aFPSCounter, 15.0f, WINDOW_HEIGHT - 40.0f, 0.7f, s_FPSCounterColor);
+            m_pTextRenderer->RenderText(aFPSCounter, 15.0f, (float)m_Height - 40.0f, 0.7f, s_FPSCounterColor);
         }
 
         m_pPlayer->UpdateView();
