@@ -46,6 +46,7 @@ void CPlayer::HandleInputs(float DeltaTime){
 void CPlayer::HandleMouseMovement(double X, double Y){
     static double s_LastX = X;
     static double s_LastY = Y;
+    static float s_MouseSens = m_pGameContext->GetSettingValue("mouse_sens").GetInt();
   
     float XOffset = X - s_LastX;
     float YOffset = s_LastY - Y;
@@ -53,8 +54,8 @@ void CPlayer::HandleMouseMovement(double X, double Y){
     s_LastX = X;
     s_LastY = Y;
 
-    XOffset *= (float) MOUSE_SENSITIVITY * 0.001f;
-    YOffset *= (float) MOUSE_SENSITIVITY * 0.001f;
+    XOffset *= (float) s_MouseSens * 0.001f;
+    YOffset *= (float) s_MouseSens * 0.001f;
 
     static float s_Yaw = -90.0f;
     static float s_Pitch = 0.0f;

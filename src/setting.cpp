@@ -31,6 +31,7 @@ CSetting::CSetting(){
     SETTING_VARIABLE_OBJ("fullscreen", Bool, true, m_Doc["window"])
 
     SETTING_VARIABLE("fov", Int, 70)
+    SETTING_VARIABLE("mouse_sens", Int, 100)
     SETTING_VARIABLE("show_fps", Bool, true)
 
     SETTING_VARIABLE("anti_aliasing", Bool, true)

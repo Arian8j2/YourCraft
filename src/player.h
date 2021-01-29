@@ -1,6 +1,5 @@
 #include "gamecontext.h"
 
-#define MOUSE_SENSITIVITY 100
 #define SPEED 250
 
 class CPlayer{
