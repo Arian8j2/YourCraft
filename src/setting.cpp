@@ -26,8 +26,8 @@ CSetting::CSetting(){
     #define SETTING_VARIABLE(name, type, default) { rapidjson::Value& Val = m_Doc[name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<const char*, rapidjson::Value>(name, Val.Get## type())); }
     #define SETTING_VARIABLE_OBJ(name, type, default, object) { rapidjson::Value& Val = object [name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<const char*, rapidjson::Value>(name, Val.Get## type())); }
     
-    SETTING_VARIABLE_OBJ("width", Int, 1366, m_Doc["window"])
-    SETTING_VARIABLE_OBJ("height", Int, 768, m_Doc["window"])
+    SETTING_VARIABLE_OBJ("width", Int, 1920, m_Doc["window"])
+    SETTING_VARIABLE_OBJ("height", Int, 1080, m_Doc["window"])
     SETTING_VARIABLE_OBJ("fullscreen", Bool, true, m_Doc["window"])
 
     SETTING_VARIABLE("fov", Int, 70)
