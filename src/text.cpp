@@ -102,8 +102,10 @@ void CTextRenderer::RenderText(const char* pText, float X, float Y, float Scale,
 
     for(int i=0; i < strlen(pText); i++){
         uint8_t SelectedChar = pText[i];
-        if(SelectedChar < PRINTABLE_CHAR_OFFSET || SelectedChar > 128)
+        if(SelectedChar < PRINTABLE_CHAR_OFFSET || SelectedChar > 128){
+            X += (1000 >> 6) * Scale;
             continue;
+        }
         
         CCharData* pCharData = &m_aCharacterMap[SelectedChar];
         float XPos = X + pCharData->m_Bearing.x * Scale;
