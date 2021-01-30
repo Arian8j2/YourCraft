@@ -11,6 +11,30 @@ CPlayer::CPlayer(CGameContext* pGameContext): m_pGameContext(pGameContext){
 void CPlayer::UpdateView(){
     m_View = glm::lookAt(m_Camera.m_Pos, m_Camera.m_Pos + m_Camera.m_Front, m_Camera.m_Up);
 
+    // glm::vec3 PosBuffer = m_Camera.m_Pos;
+    // PosBuffer.y = 1.0f;
+    // bool Found = false;
+
+    // for(CBlockInfo& BlockInfo: m_pGameContext->m_aBlockInfos){
+    //     if(BlockInfo.m_Type = BLOCK_DIRT)
+    //         BlockInfo.m_Type = BLOCK_GRASS;
+    // }
+
+    // while(CCollision::Distance(PosBuffer, m_Camera.m_Pos) < 2.0f){
+    //     PosBuffer += glm::vec3(m_Camera.m_Front.x, m_Camera.m_Front.y, m_Camera.m_Front.z);
+
+    //     for(CBlockInfo& BlockInfo: m_pGameContext->m_aBlockInfos){
+    //         if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos[3], 0.5f)){
+    //             BlockInfo.m_Type = BLOCK_DIRT;
+    //             // Found = true;
+    //             // break;
+    //         }
+    //     }
+
+    //     if(Found)
+    //         break;
+    // }
+    
 }
 
 void CPlayer::HandleInputs(float DeltaTime){

@@ -9,7 +9,7 @@ private:
     uint32_t m_Value;
 
 public:
-    CTexture(const char* pName);
+    CTexture(const char* pName, int Format = GL_RGB);
     ~CTexture();
 
     uint32_t GetValue() const { return m_Value; }

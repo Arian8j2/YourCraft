@@ -47,6 +47,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/collision.h
   ${SOURCE_PATH}/setting.cpp
   ${SOURCE_PATH}/setting.h
+  ${SOURCE_PATH}/cursor.cpp
+  ${SOURCE_PATH}/cursor.h
 )
 
 function(copy_dir DIR_NAME)

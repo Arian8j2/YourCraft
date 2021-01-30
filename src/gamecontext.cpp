@@ -3,6 +3,7 @@
 #include "texture.h"
 #include "player.h"
 #include "text.h"
+#include "cursor.h"
 
 static CGameContext* gs_GameContext;
 static void OnWindowSizeChange(GLFWwindow* pWindow, int Width, int Height){
@@ -106,6 +107,7 @@ CGameContext::CGameContext(){
 void CGameContext::Run(){
     char aFPSCounter[12] = "counting...";
     bool ShowFPS = GetSettingValue("show_fps").GetBool();
+    CCursor* pCursor = new CCursor(this);
 
     while(!glfwWindowShouldClose(m_pWindow)){
         static double s_LastTime = glfwGetTime();
@@ -134,10 +136,19 @@ void CGameContext::Run(){
             m_apBlocks[BlockInfo.m_Type]->Render(BlockInfo.m_Pos);
         }
 
+        pCursor->Render();
+
         // display FPS
         if(ShowFPS){
             static RGBAColor s_FPSCounterColor(0, 0, 0, 255);
             m_pTextRenderer->RenderText(aFPSCounter, 15.0f, (float)m_Height - 40.0f, 0.7f, s_FPSCounterColor);
+        
+            char aBuf[256];
+            snprintf(aBuf, sizeof(aBuf), "Pos: %.2f  %.2f  %.2f", m_pPlayer->m_Camera.m_Pos.x, m_pPlayer->m_Camera.m_Pos.y, m_pPlayer->m_Camera.m_Pos.z);
+            m_pTextRenderer->RenderText(aBuf, 15.0f, (float)m_Height - 80.0f, 0.7f, s_FPSCounterColor);
+        
+            snprintf(aBuf, sizeof(aBuf), "Dir: %.2f  %.2f  %.2f", glm::vec3(m_pPlayer->m_Camera.m_Front).x, glm::vec3(m_pPlayer->m_Camera.m_Front).y, glm::vec3(m_pPlayer->m_Camera.m_Front).z);
+            m_pTextRenderer->RenderText(aBuf, 15.0f, (float)m_Height - 120.0f, 0.7f, s_FPSCounterColor);
         }
 
         m_pPlayer->UpdateView();
@@ -147,6 +158,7 @@ void CGameContext::Run(){
         glfwPollEvents();
     }
 
+    delete pCursor;
     delete this;
 }
 

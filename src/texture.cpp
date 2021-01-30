@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-CTexture::CTexture(const char* pName){
+CTexture::CTexture(const char* pName, int Format){
     char aFilePath[128];
     snprintf(aFilePath, sizeof(aFilePath), "%s/%s.png", TEXTURE_PATH, pName);
 
@@ -23,7 +23,7 @@ CTexture::CTexture(const char* pName){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,  Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
+    glTexImage2D(GL_TEXTURE_2D, 0, Format,  Width, Height, 0, Format, GL_UNSIGNED_BYTE, pData);
     glGenerateMipmap(GL_TEXTURE_2D);
     
     stbi_image_free(pData);
