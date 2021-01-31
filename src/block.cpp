@@ -72,11 +72,14 @@ CBlock::CBlock(CGameContext* pGameContext, CBlockTexture Textures): m_pGameConte
     m_ColorUniform = glGetUniformLocation(pGameContext->GetBlockProgram(), "uColor");
 }
 
-void CBlock::Render(glm::mat4& Pos){
+void CBlock::Render(glm::vec3& Pos){
+    glm::mat4 MatPos(1.0f);
+    MatPos[3] = glm::vec4(Pos, 1.0f);
+
     static glm::mat4 s_Projection = glm::perspective(glm::radians((float) m_pGameContext->GetSettingValue("fov").GetInt()), (float)m_pGameContext->m_Width / m_pGameContext->m_Height, 0.1f, 100.0f);
 
     glBindVertexArray(m_VAO);
-    glUniformMatrix4fv(m_BlockPosUniform, 1, 0, glm::value_ptr(Pos));
+    glUniformMatrix4fv(m_BlockPosUniform, 1, 0, glm::value_ptr(MatPos));
     glUniformMatrix4fv(m_PlayerViewUniform, 1, 0, glm::value_ptr(m_pGameContext->GetPlayer()->m_View));
     glUniformMatrix4fv(m_ProjectionUniform, 1, 0, glm::value_ptr(s_Projection));
     

@@ -26,7 +26,7 @@ struct CBlockTexture{
 };
 
 struct CBlockInfo{
-    glm::mat4 m_Pos;
+    glm::vec3 m_Pos;
     unsigned int m_Type;
 };
 
@@ -47,5 +47,5 @@ public:
     CBlock(class CGameContext* pGameContext, CBlockTexture Textures);
     ~CBlock();
 
-    void Render(glm::mat4& Pos);
+    void Render(glm::vec3& Pos);
 };

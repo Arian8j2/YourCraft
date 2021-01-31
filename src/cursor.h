@@ -13,9 +13,11 @@ private:
 
     glm::mat4 m_Projection;
 
+    void Tick();
+
 public:
     CCursor(CGameContext* pGameContext);
     ~CCursor();
 
-    void Render();    
+    void Render();
 };

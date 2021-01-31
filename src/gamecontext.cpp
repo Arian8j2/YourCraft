@@ -94,7 +94,7 @@ CGameContext::CGameContext(){
     for(int y=0; y < 3; y++){
         for(int i=0; i < 16; i++){
             for(int j=0; j < 16; j++){
-                BlockInfoBuffer.m_Pos = glm::translate(BasePos, glm::vec3(j, -y, i));
+                BlockInfoBuffer.m_Pos = glm::vec3(j, -y, i);
                 BlockInfoBuffer.m_Type = y==0?BLOCK_GRASS: BLOCK_DIRT;
                 m_aBlockInfos.push_back(BlockInfoBuffer);
             }

@@ -47,6 +47,7 @@ CCursor::CCursor(CGameContext* pGameContext): m_pGameContext(pGameContext){
 }
 
 void CCursor::Render(){
+    Tick();
     glUseProgram(m_Program);
     glUniformMatrix4fv(glGetUniformLocation(m_Program, "uProj"), 1, 0, glm::value_ptr(m_Projection));
 
@@ -55,6 +56,21 @@ void CCursor::Render(){
     glActiveTexture(GL_TEXTURE0);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void CCursor::Tick(){
+    glm::vec3 PosBuffer = m_pGameContext->GetPlayer()->m_Camera.m_Pos;
+
+    while(CCollision::Distance(PosBuffer, m_pGameContext->GetPlayer()->m_Camera.m_Pos) < 2.0f){
+        PosBuffer += m_pGameContext->GetPlayer()->m_Camera.m_Front;
+
+        for(CBlockInfo& BlockInfo: m_pGameContext->m_aBlockInfos){
+            if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos, 0.4f)){
+                BlockInfo.m_Type = BLOCK_DIRT;
+                return;
+            }
+        }
+    }
 }
 
 CCursor::~CCursor(){
