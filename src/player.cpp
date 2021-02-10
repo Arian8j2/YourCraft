@@ -2,7 +2,7 @@
 #include <algorithm>
 
 CPlayer::CPlayer(CGameContext* pGameContext): m_pGameContext(pGameContext){
-    m_Camera.m_Pos = glm::vec3(0.0f, 1.5f, 3.0f);
+    m_Camera.m_Pos = glm::vec3(0.0f, 2.0f, 3.0f);
     m_Camera.m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     m_Camera.m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
     m_Camera.m_Right = glm::normalize(glm::cross(m_Camera.m_Front, m_Camera.m_WorldUp));
@@ -53,6 +53,12 @@ void CPlayer::HandleInputs(float DeltaTime){
                 break;
             }
         }
+    }
+
+    else if(NowMouseData.m_Right == GLFW_PRESS && s_LastMouseData.m_Right == GLFW_RELEASE && m_DoesSelected){
+        m_pGameContext->m_aBlockInfos.push_back(
+            {m_NewBlockPos, BLOCK_DIRT}
+        );
     }
 
     s_LastMouseData = NowMouseData;

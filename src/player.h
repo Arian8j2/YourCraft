@@ -26,4 +26,5 @@ public:
 
     bool m_DoesSelected;
     glm::vec3 m_SelectedBlock;
+    glm::vec3 m_NewBlockPos;
 };

@@ -74,6 +74,9 @@ void CCursor::Tick(){
                 pPlayer->m_DoesSelected = true;
                 pPlayer->m_SelectedBlock = BlockInfo.m_Pos;
                 m_pBorder->Render(BlockInfo.m_Pos);
+
+                PosBuffer -= Dir;
+                pPlayer->m_NewBlockPos = glm::round(PosBuffer);
                 return;
             }
         }
