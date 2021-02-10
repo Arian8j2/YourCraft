@@ -1,0 +1,3 @@
+libs/* linguist-vendored
+*.frag linguist-language=GLSL
+*.vert linguist-language=GLSL
