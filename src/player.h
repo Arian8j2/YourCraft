@@ -6,6 +6,10 @@ class CPlayer{
 private:
     CGameContext* m_pGameContext;
 
+    struct CMouseData{
+        bool m_Left, m_Right;
+    };
+
 public:
     CPlayer(CGameContext* pGameContext);
 

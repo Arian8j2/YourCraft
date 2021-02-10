@@ -43,18 +43,19 @@ void CPlayer::HandleInputs(float DeltaTime){
     }
 
     // mouse
-    static float s_LastLeftClick = 0;
-
-    if(s_LastLeftClick < glfwGetTime() && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_1) && m_DoesSelected){
+    static CMouseData s_LastMouseData = {0, 0};
+    CMouseData NowMouseData = {glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT), glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT)};
+    
+    if(NowMouseData.m_Left == GLFW_PRESS && s_LastMouseData.m_Left == GLFW_RELEASE && m_DoesSelected){
         for(int i=0; i < m_pGameContext->m_aBlockInfos.size(); i++){
             if(m_pGameContext->m_aBlockInfos[i].m_Pos == m_SelectedBlock){
                 m_pGameContext->m_aBlockInfos.erase(m_pGameContext->m_aBlockInfos.begin() + i);
                 break;
             }
         }
-
-        s_LastLeftClick = glfwGetTime() + 0.2f;
     }
+
+    s_LastMouseData = NowMouseData;
 }
 
 void CPlayer::HandleMouseMovement(double X, double Y){
