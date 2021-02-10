@@ -26,7 +26,6 @@ private:
     class CTextRenderer* m_pTextRenderer;
 
     class CTexture* m_apBlockTexs[3];
-    class CBlock* m_apBlocks[NUM_BLOCKS];
 
     CSetting m_Setting;
 
@@ -44,6 +43,7 @@ public:
     GLFWwindow* GetWindow() { return m_pWindow; }
     rapidjson::Value& GetSettingValue(const char* pName){ return m_Setting.m_Values[pName]; }
 
+    class CBlock* m_apBlocks[NUM_BLOCKS];
     std::vector<CBlockInfo> m_aBlockInfos;
 
     int m_Width, m_Height;

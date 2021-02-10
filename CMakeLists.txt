@@ -49,6 +49,8 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/setting.h
   ${SOURCE_PATH}/cursor.cpp
   ${SOURCE_PATH}/cursor.h
+  ${SOURCE_PATH}/border.cpp
+  ${SOURCE_PATH}/border.h
 )
 
 function(copy_dir DIR_NAME)

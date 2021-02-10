@@ -19,4 +19,7 @@ public:
     } m_Camera;
 
     glm::mat4 m_View;
+
+    bool m_DoesSelected;
+    glm::vec3 m_SelectedBlock;
 };

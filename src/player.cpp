@@ -1,4 +1,5 @@
 #include "player.h"
+#include <algorithm>
 
 CPlayer::CPlayer(CGameContext* pGameContext): m_pGameContext(pGameContext){
     m_Camera.m_Pos = glm::vec3(0.0f, 1.5f, 3.0f);
@@ -39,6 +40,20 @@ void CPlayer::HandleInputs(float DeltaTime){
         float Y = m_Camera.m_Pos.y;
         m_Camera.m_Pos -= m_Camera.m_Front * (SPEED / 100.0f * DeltaTime) * Boost;
         m_Camera.m_Pos.y = Y;
+    }
+
+    // mouse
+    static float s_LastLeftClick = 0;
+
+    if(s_LastLeftClick < glfwGetTime() && glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_1) && m_DoesSelected){
+        for(int i=0; i < m_pGameContext->m_aBlockInfos.size(); i++){
+            if(m_pGameContext->m_aBlockInfos[i].m_Pos == m_SelectedBlock){
+                m_pGameContext->m_aBlockInfos.erase(m_pGameContext->m_aBlockInfos.begin() + i);
+                break;
+            }
+        }
+
+        s_LastLeftClick = glfwGetTime() + 0.2f;
     }
 }
 

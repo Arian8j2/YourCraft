@@ -42,8 +42,9 @@ CCursor::CCursor(CGameContext* pGameContext): m_pGameContext(pGameContext){
     glm::mat4 Model(1.0f);
     Model = glm::translate(Model, glm::vec3((float)m_pGameContext->m_Width/2 - 5.0f, (float)m_pGameContext->m_Height/2, 0.0f));
     Model = glm::scale(Model, glm::vec3(50.0f, 50.0f, 1.0f)); 
-    
     m_Projection *= Model;
+
+    m_pBorder = new CBorder(m_pGameContext);
 }
 
 void CCursor::Render(){
@@ -59,14 +60,20 @@ void CCursor::Render(){
 }
 
 void CCursor::Tick(){
-    glm::vec3 PosBuffer = m_pGameContext->GetPlayer()->m_Camera.m_Pos;
+    CPlayer* pPlayer = m_pGameContext->GetPlayer(); 
+    glm::vec3 PosBuffer = pPlayer->m_Camera.m_Pos;
+    glm::vec3 Dir = glm::vec3(pPlayer->m_Camera.m_Front.x/16.0f, pPlayer->m_Camera.m_Front.y/16.0f, pPlayer->m_Camera.m_Front.z/16.0f);
 
-    while(CCollision::Distance(PosBuffer, m_pGameContext->GetPlayer()->m_Camera.m_Pos) < 2.0f){
-        PosBuffer += m_pGameContext->GetPlayer()->m_Camera.m_Front;
+    pPlayer->m_DoesSelected = false;
+
+    while(CCollision::Distance(PosBuffer, pPlayer->m_Camera.m_Pos) < 4.5f){
+        PosBuffer += Dir;
 
         for(CBlockInfo& BlockInfo: m_pGameContext->m_aBlockInfos){
-            if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos, 0.4f)){
-                BlockInfo.m_Type = BLOCK_DIRT;
+            if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos, 0.5f)){
+                pPlayer->m_DoesSelected = true;
+                pPlayer->m_SelectedBlock = BlockInfo.m_Pos;
+                m_pBorder->Render(BlockInfo.m_Pos);
                 return;
             }
         }
@@ -75,6 +82,7 @@ void CCursor::Tick(){
 
 CCursor::~CCursor(){
     delete m_pTexture;
+    delete m_pBorder;
     // glDeleteBuffers(1, &m_VBO);
     // glDeleteVertexArrays(1, &m_VAO);
     // glDeleteProgram(m_Program);
