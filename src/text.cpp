@@ -18,7 +18,7 @@ CTextRenderer::CTextRenderer(CGameContext* pGameContext): m_pGameContext(pGameCo
         throw 1;
     }
 
-    FT_Set_Pixel_Sizes(FtFace, 0, 48);
+    FT_Set_Pixel_Sizes(FtFace, 0, 96);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glEnable(GL_BLEND);
@@ -99,12 +99,19 @@ void CTextRenderer::RenderText(const char* pText, float X, float Y, float Scale,
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_VAO);
 
+    const char* pYourCraft = strstr(pText, "YourCraft");
 
     for(int i=0; i < strlen(pText); i++){
         uint8_t SelectedChar = pText[i];
         if(SelectedChar < PRINTABLE_CHAR_OFFSET || SelectedChar > 128){
             X += (1000 >> 6) * Scale;
             continue;
+        }
+
+
+        if(pYourCraft == &pText[i]){
+            Color = RGBAColor(0.8f, 0.0f, 0.0f, Color.a);
+            glUniform4f(m_ColorUniformLoc, Color.r, Color.g, Color.b, Color.a);
         }
         
         CCharData* pCharData = &m_aCharacterMap[SelectedChar];
