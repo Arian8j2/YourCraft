@@ -31,15 +31,11 @@ void CPlayer::HandleInputs(float DeltaTime){
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_W)){
-        float Y = m_Camera.m_Pos.y;
         m_Camera.m_Pos += m_Camera.m_Front * (SPEED / 100.0f * DeltaTime) * Boost;
-        m_Camera.m_Pos.y = Y;
     }
 
     if(glfwGetKey(pWindow, GLFW_KEY_S)){
-        float Y = m_Camera.m_Pos.y;
         m_Camera.m_Pos -= m_Camera.m_Front * (SPEED / 100.0f * DeltaTime) * Boost;
-        m_Camera.m_Pos.y = Y;
     }
 
     // mouse
