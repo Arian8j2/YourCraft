@@ -1,15 +1,15 @@
 #include "collision.h"
 
-bool CCollision::InterestBox(glm::vec3 A, float ASize, glm::vec3 B, float BSize){
-    return (A.x - ASize <= B.x + BSize && A.x + ASize >= B.x - BSize) &&
-           (A.y - ASize <= B.y + BSize && A.y + ASize >= B.y - BSize) &&
-           (A.z - ASize <= B.z + BSize && A.z + ASize >= B.z - BSize);
+bool CCollision::InterestBox(glm::vec3& A, glm::vec3& ASize, glm::vec3& B, glm::vec3& BSize){
+    return (A.x - ASize.x <= B.x + BSize.x && A.x + ASize.x >= B.x - BSize.x) &&
+           (A.y - ASize.y <= B.y + BSize.y && A.y + ASize.y >= B.y - BSize.y) &&
+           (A.z - ASize.z <= B.z + BSize.z && A.z + ASize.z >= B.z - BSize.z);
 }
 
-bool CCollision::InterestPoint(glm::vec3 A, glm::vec3 B, float BSize){
-    return (A.x >= B.x - BSize && A.x <= B.x + BSize) &&
-           (A.y >= B.y - BSize && A.y <= B.y + BSize) &&
-           (A.z >= B.z - BSize && A.z <= B.z + BSize);
+bool CCollision::InterestPoint(glm::vec3& A, glm::vec3& B, glm::vec3& BSize){
+    return (A.x >= B.x - BSize.x && A.x <= B.x + BSize.x) &&
+           (A.y >= B.y - BSize.y && A.y <= B.y + BSize.y) &&
+           (A.z >= B.z - BSize.z && A.z <= B.z + BSize.z);
 }
 
 float CCollision::Distance(glm::vec3& A, glm::vec3& B){
