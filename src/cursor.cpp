@@ -64,13 +64,14 @@ void CCursor::Tick(){
     glm::vec3 PosBuffer = pPlayer->m_Camera.m_Pos;
     glm::vec3 Dir = glm::vec3(pPlayer->m_Camera.m_Front.x/16.0f, pPlayer->m_Camera.m_Front.y/16.0f, pPlayer->m_Camera.m_Front.z/16.0f);
 
+    static glm::vec3 s_BlockSize(0.5f, 0.5f, 0.5f);
     pPlayer->m_DoesSelected = false;
 
     while(CCollision::Distance(PosBuffer, pPlayer->m_Camera.m_Pos) < 4.5f){
         PosBuffer += Dir;
 
         for(CBlockInfo& BlockInfo: m_pGameContext->m_aBlockInfos){
-            if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos, 0.5f)){
+            if(CCollision::InterestPoint(PosBuffer, BlockInfo.m_Pos, s_BlockSize)){
                 pPlayer->m_DoesSelected = true;
                 pPlayer->m_SelectedBlock = BlockInfo.m_Pos;
                 m_pBorder->Render(BlockInfo.m_Pos);
