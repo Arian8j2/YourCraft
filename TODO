@@ -1,0 +1,3 @@
+Windows compatible:
+    have problem with reading files that endline are CRLF
+    when v-sync is off it just show blank screen

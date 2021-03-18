@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <cmath>
 #include <inttypes.h>
+#include <algorithm>
 
 #include "color.h"
 #include "block.h"

@@ -53,16 +53,26 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_PATH}/border.h
 )
 
-function(copy_dir DIR_NAME)
+function(copy DIR_NAME)
+  if(${ARGC} GREATER 1)
+    set(COPY_COMMAND copy)
+  else()
+    set(COPY_COMMAND copy_directory)
+  endif()
+
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                        ${CMAKE_SOURCE_DIR}/${DIR_NAME}/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/${DIR_NAME})
+                    COMMAND ${CMAKE_COMMAND} -E ${COPY_COMMAND}
+                        ${CMAKE_SOURCE_DIR}/${DIR_NAME} $<TARGET_FILE_DIR:${PROJECT_NAME}>/${DIR_NAME})
 endfunction()
 
-copy_dir(shaders)
-copy_dir(textures)
-copy_dir(fonts)
-configure_file(settings.json settings.json COPYONLY)
+copy(shaders)
+copy(textures)
+copy(fonts)
+copy(settings.json FILE)
+
+if(UNIX)
+  set(UNIX_LIBRARIES dl)
+endif()
 
 include_directories(${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${STB_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${RAPIDJSON_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} GLAD glfw dl freetype)
+target_link_libraries(${PROJECT_NAME} GLAD glfw freetype ${UNIX})

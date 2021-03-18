@@ -12,7 +12,7 @@ CSetting::CSetting(){
     fseek(pFile, 0, SEEK_SET);
 
     char* pData = new char[Size + 1];
-    fread(pData, 1, Size, pFile);
+    fread(pData, sizeof(char), Size, pFile);
     pData[Size] = '\0';
 
     fclose(pFile);
@@ -23,8 +23,8 @@ CSetting::CSetting(){
         throw 1;
     }
 
-    #define SETTING_VARIABLE(name, type, default) { rapidjson::Value& Val = m_Doc[name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<const char*, rapidjson::Value>(name, Val.Get## type())); }
-    #define SETTING_VARIABLE_OBJ(name, type, default, object) { rapidjson::Value& Val = object [name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<const char*, rapidjson::Value>(name, Val.Get## type())); }
+    #define SETTING_VARIABLE(name, type, default) { rapidjson::Value& Val = m_Doc[name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<std::string, rapidjson::Value>(name, Val.Get## type())); }
+    #define SETTING_VARIABLE_OBJ(name, type, default, object) { rapidjson::Value& Val = object [name]; if(!Val.Is## type()) Val.Set## type(default); m_Values.insert(std::pair<std::string, rapidjson::Value>(name, Val.Get## type())); }
     
     SETTING_VARIABLE_OBJ("width", Int, 1920, m_Doc["window"])
     SETTING_VARIABLE_OBJ("height", Int, 1080, m_Doc["window"])

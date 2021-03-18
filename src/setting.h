@@ -12,5 +12,5 @@ private:
 public:
     CSetting();
 
-    std::map<const char*, rapidjson::Value> m_Values;
+    std::map<std::string, rapidjson::Value> m_Values;
 };
