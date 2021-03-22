@@ -75,4 +75,4 @@ if(UNIX)
 endif()
 
 include_directories(${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${STB_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${RAPIDJSON_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} GLAD glfw freetype ${UNIX})
+target_link_libraries(${PROJECT_NAME} GLAD glfw freetype ${UNIX_LIBRARIES})
